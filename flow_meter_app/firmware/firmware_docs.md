@@ -1,3 +1,4 @@
+-- Active: 1713771791425@@127.0.0.1@3306
 # Firmware ESP32 untuk IoT Water Flow Meter
 
 Firmware ini dirancang untuk mikrokontroler ESP32 untuk membaca sinyal dari sensor flow meter YF-S201 dan mengirimkan data ke server backend.

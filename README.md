@@ -26,7 +26,12 @@ Sistem ini dirancang untuk membaca sinyal *pulse* dari sensor Flow Meter menggun
    - Estimasi biaya penggunaan air
    - Riwayat pembacaan sensor
 
-3. **Fungsionalitas Tambahan**
+3. **Tampilan Lokal dengan OLED**
+   - Menampilkan data flow meter secara real-time pada layar OLED SSD1306 0.96" I2C
+   - Mendukung tampilan untuk satu atau lebih perangkat
+   - Mengambil data dari API server secara berkala
+
+4. **Fungsionalitas Tambahan**
    - Deteksi kebocoran (rencana pengembangan lanjutan)
    - Ekspor data ke format CSV
 
@@ -59,12 +64,20 @@ flow_meter_app/
 │
 ├── firmware/
 │   ├── src/
-│   │   └── flow_meter_firmware.ino  # Firmware untuk ESP32
-│   └── firmware_docs.md        # Dokumentasi firmware
+│   │   ├── flow_meter_firmware.ino           # Firmware untuk ESP32 (pengiriman data)
+│   │   ├── oled_display_firmware.ino         # Firmware untuk ESP32 (tampilan OLED single device)
+│   │   └── multi_device_oled_display_firmware.ino # Firmware untuk ESP32 (tampilan OLED multi device)
+│   ├── firmware_docs.md        # Dokumentasi firmware
+│   └── oled_display_readme.md  # Dokumentasi tampilan OLED
 │
-└── docs/
-    ├── database_schema.sql     # Skrip pembuatan database
-    └── installation_guide.md   # Panduan instalasi dan pengujian
+├── docs/
+│   ├── database_schema.sql     # Skrip pembuatan database
+│   └── installation_guide.md   # Panduan instalasi dan pengujian
+│
+└── backend/
+    └── api/
+        ├── get_latest_reading.php  # API endpoint spesifik untuk tampilan OLED
+        └── (other existing API files)
 ```
 
 ## 🛠️ Persyaratan Sistem
@@ -98,13 +111,23 @@ flow_meter_app/
 ### B. Instalasi Frontend
 1. Akses dashboard di `http://localhost/FLOW_METER_SENSOR_2.0/flow_meter_app/frontend/index.html`
 
-### C. Instalasi Firmware ESP32
+### C. Instalasi Firmware ESP32 (Pengiriman Data)
 1. Buka file `firmware/src/flow_meter_firmware.ino` di Arduino IDE
 2. Instal library ArduinoJson melalui Library Manager
 3. Ganti SSID, password, dan serverUrl di bagian atas file
 4. Upload firmware ke ESP32
 
-Lihat file `docs/installation_guide.md` untuk panduan instalasi lengkap.
+### D. Instalasi Firmware ESP32 (Tampilan OLED)
+1. Siapkan perangkat ESP32 dan layar OLED SSD1306 0.96" I2C
+2. Lakukan wiring sesuai dokumentasi di `firmware/oled_display_readme.md`
+3. Buka salah satu file firmware OLED di Arduino IDE:
+   - `firmware/src/oled_display_firmware.ino` (untuk satu perangkat)
+   - `firmware/src/multi_device_oled_display_firmware.ino` (untuk beberapa perangkat)
+4. Instal library tambahan: Adafruit SSD1306, Adafruit GFX Library
+5. Ganti konfigurasi WiFi, server URL, dan device ID sesuai kebutuhan
+6. Upload firmware ke ESP32
+
+Lihat file `docs/installation_guide.md` dan `firmware/oled_display_readme.md` untuk panduan instalasi lengkap.
 
 ## 📊 Penggunaan
 
